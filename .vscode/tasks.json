@@ -1,0 +1,71 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Dev: Start UFFICIENT Web App",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"dev:web"
+			],
+			"group": "build",
+			"isBackground": true,
+			"problemMatcher": [
+				"$tsc"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			}
+		},
+		{
+			"label": "Dev: Start Admin Dashboard",
+			"type": "shell",
+			"command": "npm",
+			"args": ["run", "dev:admin"],
+			"group": "build",
+			"isBackground": true,
+			"problemMatcher": ["$tsc"],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			}
+		},
+		{
+			"label": "Dev: Start Mobile App",
+			"type": "shell",
+			"command": "npm",
+			"args": ["run", "dev:mobile"],
+			"group": "build",
+			"isBackground": true,
+			"problemMatcher": [],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			}
+		},
+		{
+			"label": "Build: All Apps",
+			"type": "shell",
+			"command": "npm",
+			"args": ["run", "build"],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"problemMatcher": ["$tsc"],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			}
+		},
+		{
+			"label": "Install: All Dependencies",
+			"type": "shell",
+			"command": "npm",
+			"args": ["run", "install-all"],
+			"group": "build",
+			"problemMatcher": [],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			}
+		}
+	]
+}

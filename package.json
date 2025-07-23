@@ -1,0 +1,44 @@
+{
+  "name": "ufficient-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "UFFICIENT APP - Unlock Your Most Efficient Self",
+  "scripts": {
+    "dev": "npm run dev --workspace=apps/web",
+    "dev:web": "npm run dev --workspace=apps/web",
+    "dev:admin": "npm run dev --workspace=apps/admin",
+    "dev:mobile": "npm run start --workspace=apps/mobile",
+    "build": "npm run build --workspace=apps/web && npm run build --workspace=apps/admin",
+    "build:web": "npm run build --workspace=apps/web",
+    "build:admin": "npm run build --workspace=apps/admin",
+    "build:mobile": "npm run build --workspace=apps/mobile",
+    "lint": "npm run lint --workspaces",
+    "type-check": "npm run type-check --workspaces",
+    "clean": "rm -rf node_modules && npm run clean --workspaces",
+    "install-all": "npm install && npm install --workspaces"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0",
+    "eslint": "^8.0.0",
+    "prettier": "^3.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "keywords": [
+    "productivity",
+    "task-management",
+    "gamification",
+    "ai",
+    "react-native",
+    "nextjs"
+  ],
+  "author": "UFFICIENT Team",
+  "license": "MIT"
+}

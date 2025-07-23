@@ -1,0 +1,21 @@
+{
+  "name": "@ufficient/core",
+  "version": "1.0.0",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "lint": "eslint src/",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "react": "^18"
+  },
+  "devDependencies": {
+    "@types/react": "^18",
+    "typescript": "^5",
+    "eslint": "^8"
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "badges": [
+    {
+      "id": "starter",
+      "name": "Starter",
+      "description": "Complete your first 5 tasks",
+      "icon": "🌟",
+      "requirements": {
+        "type": "taskCount",
+        "value": 5
+      },
+      "points": 50,
+      "rarity": "common"
+    },
+    {
+      "id": "productivity-pro",
+      "name": "Productivity Pro",
+      "description": "Complete 50 tasks",
+      "icon": "⚡",
+      "requirements": {
+        "type": "taskCount",
+        "value": 50
+      },
+      "points": 200,
+      "rarity": "uncommon"
+    },
+    {
+      "id": "efficiency-champion",
+      "name": "Efficiency Champion",
+      "description": "Maintain a 7-day streak",
+      "icon": "🏆",
+      "requirements": {
+        "type": "streak",
+        "value": 7
+      },
+      "points": 150,
+      "rarity": "rare"
+    },
+    {
+      "id": "week-warrior",
+      "name": "Week Warrior",
+      "description": "Complete at least 1 task every day for a week",
+      "icon": "⚔️",
+      "requirements": {
+        "type": "consecutiveDays",
+        "value": 7
+      },
+      "points": 100,
+      "rarity": "uncommon"
+    },
+    {
+      "id": "category-master",
+      "name": "Category Master",
+      "description": "Complete tasks in all 5 categories",
+      "icon": "🎯",
+      "requirements": {
+        "type": "categoryDiversity",
+        "value": 5
+      },
+      "points": 75,
+      "rarity": "common"
+    }
+  ]
+}

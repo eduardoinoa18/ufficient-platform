@@ -1,0 +1,30 @@
+{
+  "typescript.preferences.importModuleSpecifier": "relative",
+  "typescript.preferences.includePackageJsonAutoImports": "on",
+  "editor.defaultFormatter": "vscode.typescript-language-features",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "emmet.includeLanguages": {
+    "javascript": "javascriptreact",
+    "typescript": "typescriptreact"
+  },
+  "files.associations": {
+    "*.json": "jsonc"
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/.expo": true,
+    "**/.next": true
+  },
+  "typescript.preferences.includeCompletionsForModuleExports": true,
+  "tailwindCSS.includeLanguages": {
+    "typescript": "typescript",
+    "typescriptreact": "typescriptreact"
+  },
+  "tailwindCSS.experimental.classRegex": [
+    ["className\\s*[=:]\\s*['\"`]([^'\"`]*)['\"`]", "['\"`]([^'\"`]*)['\"`]"]
+  ]
+}

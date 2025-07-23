@@ -1,0 +1,12 @@
+{
+  "buildCommand": "cd apps/admin && npm install && npm run build",
+  "outputDirectory": "apps/admin/.next",
+  "installCommand": "npm install",
+  "framework": "nextjs",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/apps/admin/$1"
+    }
+  ]
+}

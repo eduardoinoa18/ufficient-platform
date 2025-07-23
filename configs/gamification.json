@@ -1,0 +1,33 @@
+{
+  "streaks": {
+    "enabled": true,
+    "minimumTasksPerDay": 1,
+    "maxStreakDays": 365,
+    "bonusPoints": {
+      "7day": 25,
+      "30day": 100,
+      "100day": 500
+    }
+  },
+  "points": {
+    "taskCompletion": 10,
+    "bonusMultiplier": 1.5,
+    "categories": {
+      "Work": 10,
+      "Personal": 8,
+      "Fitness": 12,
+      "Side Hustle": 15,
+      "Social": 8
+    }
+  },
+  "leaderboards": {
+    "enabled": true,
+    "refreshInterval": "daily",
+    "categories": ["weekly", "monthly", "allTime"],
+    "minParticipants": 3
+  },
+  "achievements": {
+    "enabled": true,
+    "categories": ["tasks", "streaks", "social", "milestones"]
+  }
+}

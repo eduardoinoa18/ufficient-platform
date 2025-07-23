@@ -1,0 +1,381 @@
+{
+  "hero": {
+    "headline": "Unlock Your Most Efficient Self",
+    "subheadline": "The all-in-one productivity platform that combines AI-powered task management, gamification, and CRM integration to help you achieve your goals faster than ever.",
+    "primaryCTA": {
+      "text": "Start Your Journey",
+      "link": "#download"
+    },
+    "secondaryCTA": {
+      "text": "Watch Demo",
+      "link": "#demo"
+    },
+    "mockupImages": [
+      "/images/mockups/dashboard-mockup.png",
+      "/images/mockups/tasks-mockup.png",
+      "/images/mockups/gamification-mockup.png"
+    ]
+  },
+  "features": {
+    "primaryFeatures": [
+      {
+        "id": "ai-tasks",
+        "title": "AI-Powered Task Generation",
+        "description": "Let our intelligent AI create personalized tasks based on your goals, schedule, and preferences. Never run out of productive things to do.",
+        "icon": "Brain",
+        "gradient": "from-purple-600 to-blue-500"
+      },
+      {
+        "id": "crm-sync",
+        "title": "CRM Integration",
+        "description": "Seamlessly sync with Salesforce, HubSpot, and other CRM platforms. Turn your professional tasks into personal productivity wins.",
+        "icon": "Users",
+        "gradient": "from-blue-500 to-cyan-400"
+      },
+      {
+        "id": "gamification",
+        "title": "Gamified Productivity",
+        "description": "Earn points, unlock badges, and climb leaderboards. Make productivity addictive with our comprehensive gamification system.",
+        "icon": "Trophy",
+        "gradient": "from-cyan-400 to-green-400"
+      }
+    ],
+    "secondaryFeatures": [
+      {
+        "id": "streaks",
+        "title": "Streak Tracking",
+        "description": "Build lasting habits with daily streak tracking and bonus rewards.",
+        "icon": "Zap",
+        "gradient": "from-orange-500 to-red-500"
+      },
+      {
+        "id": "social",
+        "title": "Social Feed",
+        "description": "Share achievements and stay motivated with your productivity community.",
+        "icon": "Heart",
+        "gradient": "from-pink-500 to-purple-500"
+      },
+      {
+        "id": "analytics",
+        "title": "Smart Analytics",
+        "description": "Track your productivity patterns and optimize your daily routine.",
+        "icon": "BarChart3",
+        "gradient": "from-green-500 to-blue-500"
+      },
+      {
+        "id": "categories",
+        "title": "Life Categories",
+        "description": "Organize tasks across Work, Personal, Fitness, Side Hustle, and Social.",
+        "icon": "Grid3x3",
+        "gradient": "from-indigo-500 to-purple-500"
+      },
+      {
+        "id": "calendar",
+        "title": "Calendar Sync",
+        "description": "Integrate with Google Calendar, Outlook, and other scheduling tools.",
+        "icon": "Calendar",
+        "gradient": "from-blue-600 to-indigo-600"
+      },
+      {
+        "id": "mobile",
+        "title": "Cross-Platform",
+        "description": "Native iOS and Android apps with real-time synchronization.",
+        "icon": "Smartphone",
+        "gradient": "from-purple-600 to-pink-600"
+      }
+    ],
+    "ctaSection": {
+      "title": "Ready to Transform Your Productivity?",
+      "description": "Join thousands of users who have already unlocked their most efficient selves with UFFICIENT.",
+      "buttonText": "Get Started Now",
+      "buttonLink": "#download"
+    }
+  },
+  "testimonials": {
+    "autoRotate": true,
+    "rotationInterval": 5000,
+    "testimonials": [
+      {
+        "id": "sarah-chen",
+        "name": "Sarah Chen",
+        "role": "Product Manager",
+        "company": "TechCorp",
+        "content": "UFFICIENT completely transformed how I manage my daily tasks. The AI suggestions are incredibly accurate, and the gamification keeps me motivated throughout the day.",
+        "avatar": "/images/avatars/sarah-chen.jpg",
+        "rating": 5,
+        "stats": {
+          "label": "Productivity Increase",
+          "value": "+300%"
+        }
+      },
+      {
+        "id": "marcus-rodriguez",
+        "name": "Marcus Rodriguez",
+        "role": "Sales Director",
+        "company": "SalesForce Pro",
+        "content": "The CRM integration is a game-changer. I can manage my personal goals alongside my professional targets seamlessly. The streak system keeps me consistently productive.",
+        "avatar": "/images/avatars/marcus-rodriguez.jpg",
+        "rating": 5,
+        "stats": {
+          "label": "Daily Streak",
+          "value": "127 days"
+        }
+      },
+      {
+        "id": "emily-watson",
+        "name": "Emily Watson",
+        "role": "Entrepreneur",
+        "company": "StartupLife",
+        "content": "As a busy entrepreneur, UFFICIENT helps me balance my side hustle, fitness goals, and personal life. The AI task generation saves me hours of planning each week.",
+        "avatar": "/images/avatars/emily-watson.jpg",
+        "rating": 5,
+        "stats": {
+          "label": "Time Saved",
+          "value": "15hrs/week"
+        }
+      },
+      {
+        "id": "david-kim",
+        "name": "David Kim",
+        "role": "Software Engineer",
+        "company": "CodeCraft",
+        "content": "The gamification aspect makes productivity fun again. I love competing with friends on the leaderboards and unlocking new badges. It's like having a personal coach.",
+        "avatar": "/images/avatars/david-kim.jpg",
+        "rating": 5,
+        "stats": {
+          "label": "Badges Earned",
+          "value": "47"
+        }
+      },
+      {
+        "id": "lisa-thompson",
+        "name": "Lisa Thompson",
+        "role": "Marketing Manager",
+        "company": "BrandBoost",
+        "content": "UFFICIENT's social features create amazing accountability. Seeing my team's progress motivates me to stay on track with my own goals. The analytics are incredibly insightful.",
+        "avatar": "/images/avatars/lisa-thompson.jpg",
+        "rating": 5,
+        "stats": {
+          "label": "Goal Achievement",
+          "value": "94%"
+        }
+      }
+    ]
+  },
+  "referral": {
+    "title": "Invite Friends, Unlock Premium",
+    "description": "Share UFFICIENT with friends and family to unlock exclusive features and premium benefits.",
+    "tiers": [
+      {
+        "id": "starter",
+        "invites": 3,
+        "reward": "Premium Trial",
+        "icon": "Gift",
+        "description": "7-day premium features access"
+      },
+      {
+        "id": "advocate",
+        "invites": 5,
+        "reward": "Pro Features",
+        "icon": "Star",
+        "description": "Advanced analytics and AI suggestions"
+      },
+      {
+        "id": "champion",
+        "invites": 10,
+        "reward": "Lifetime Premium",
+        "icon": "Crown",
+        "description": "All premium features forever"
+      }
+    ],
+    "ctaText": "Start Referring",
+    "ctaLink": "#signup"
+  },
+  "contact": {
+    "title": "Get in Touch",
+    "description": "Have questions, feedback, or need support? We'd love to hear from you.",
+    "types": [
+      {
+        "id": "general",
+        "label": "General Inquiry",
+        "value": "general"
+      },
+      {
+        "id": "support",
+        "label": "Technical Support",
+        "value": "support"
+      },
+      {
+        "id": "business",
+        "label": "Business Partnership",
+        "value": "business"
+      },
+      {
+        "id": "media",
+        "label": "Media & Press",
+        "value": "media"
+      }
+    ],
+    "email": "hello@ufficient.app",
+    "phone": "+1 (555) 123-4567",
+    "address": "123 Innovation Drive, Tech Valley, CA 94025"
+  },
+  "footer": {
+    "logo": {
+      "text": "UFFICIENT",
+      "showIcon": true
+    },
+    "tagline": "Unlock Your Most Efficient Self",
+    "sections": [
+      {
+        "id": "product",
+        "title": "Product",
+        "links": [
+          {
+            "id": "features",
+            "text": "Features",
+            "href": "#features"
+          },
+          {
+            "id": "pricing",
+            "text": "Pricing",
+            "href": "#pricing"
+          },
+          {
+            "id": "integrations",
+            "text": "Integrations",
+            "href": "#integrations"
+          },
+          {
+            "id": "api",
+            "text": "API",
+            "href": "#api"
+          }
+        ]
+      },
+      {
+        "id": "company",
+        "title": "Company",
+        "links": [
+          {
+            "id": "about",
+            "text": "About",
+            "href": "#about"
+          },
+          {
+            "id": "blog",
+            "text": "Blog",
+            "href": "#blog"
+          },
+          {
+            "id": "careers",
+            "text": "Careers",
+            "href": "#careers"
+          },
+          {
+            "id": "contact",
+            "text": "Contact",
+            "href": "#contact"
+          }
+        ]
+      },
+      {
+        "id": "support",
+        "title": "Support",
+        "links": [
+          {
+            "id": "help",
+            "text": "Help Center",
+            "href": "#help"
+          },
+          {
+            "id": "docs",
+            "text": "Documentation",
+            "href": "#docs"
+          },
+          {
+            "id": "status",
+            "text": "System Status",
+            "href": "#status"
+          },
+          {
+            "id": "community",
+            "text": "Community",
+            "href": "#community"
+          }
+        ]
+      },
+      {
+        "id": "legal",
+        "title": "Legal",
+        "links": [
+          {
+            "id": "privacy",
+            "text": "Privacy Policy",
+            "href": "/privacy"
+          },
+          {
+            "id": "terms",
+            "text": "Terms of Service",
+            "href": "/terms"
+          },
+          {
+            "id": "cookies",
+            "text": "Cookie Policy",
+            "href": "/cookies"
+          }
+        ]
+      }
+    ],
+    "social": [
+      {
+        "id": "twitter",
+        "platform": "Twitter",
+        "url": "https://twitter.com/ufficient",
+        "icon": "Twitter"
+      },
+      {
+        "id": "linkedin",
+        "platform": "LinkedIn",
+        "url": "https://linkedin.com/company/ufficient",
+        "icon": "Linkedin"
+      },
+      {
+        "id": "github",
+        "platform": "GitHub",
+        "url": "https://github.com/ufficient",
+        "icon": "Github"
+      },
+      {
+        "id": "discord",
+        "platform": "Discord",
+        "url": "https://discord.gg/ufficient",
+        "icon": "MessageCircle"
+      }
+    ],
+    "legal": {
+      "copyright": "© 2025 UFFICIENT. All rights reserved.",
+      "privacy": "/privacy",
+      "terms": "/terms"
+    }
+  },
+  "appStore": {
+    "appStore": {
+      "enabled": true,
+      "url": "https://apps.apple.com/app/ufficient",
+      "comingSoon": true
+    },
+    "googlePlay": {
+      "enabled": true,
+      "url": "https://play.google.com/store/apps/details?id=com.ufficient.app",
+      "comingSoon": true
+    }
+  },
+  "metadata": {
+    "title": "UFFICIENT - Unlock Your Most Efficient Self",
+    "description": "The all-in-one productivity platform that combines AI-powered task management, gamification, and CRM integration to help you achieve your goals.",
+    "keywords": ["productivity", "task management", "AI", "gamification", "CRM", "efficiency", "goals", "habits"],
+    "ogImage": "/images/og-image.png",
+    "twitterCard": "summary_large_image"
+  }
+}
