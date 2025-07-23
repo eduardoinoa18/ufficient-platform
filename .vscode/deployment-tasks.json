@@ -1,0 +1,110 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "🚀 Deploy Web App (Landing)",
+      "type": "shell",
+      "command": "vercel",
+      "args": ["--prod"],
+      "options": {
+        "cwd": "${workspaceFolder}/apps/web"
+      },
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "new"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🔧 Deploy Admin Portal", 
+      "type": "shell",
+      "command": "vercel",
+      "args": ["--prod"],
+      "options": {
+        "cwd": "${workspaceFolder}/apps/admin"
+      },
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always", 
+        "focus": false,
+        "panel": "new"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "📱 Start Mobile App",
+      "type": "shell", 
+      "command": "npm",
+      "args": ["start"],
+      "options": {
+        "cwd": "${workspaceFolder}/apps/mobile"
+      },
+      "group": "build",
+      "isBackground": true,
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "new"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🌐 Connect Web to GitHub → Vercel",
+      "type": "shell",
+      "command": "vercel",
+      "args": ["--prod", "--confirm"],
+      "options": {
+        "cwd": "${workspaceFolder}/apps/web"
+      },
+      "group": "build",
+      "dependsOn": "Setup Vercel Git Integration",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "new"
+      }
+    },
+    {
+      "label": "Setup Vercel Git Integration",
+      "type": "shell", 
+      "command": "echo",
+      "args": ["Visit https://vercel.com/dashboard and connect your GitHub repo: https://github.com/eduardoinoa/ufficient-platform"],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "new"
+      }
+    },
+    {
+      "label": "🔗 Setup GitHub → Vercel Integration",
+      "type": "shell",
+      "command": "echo", 
+      "args": ["Instructions:", "1. Go to https://vercel.com/dashboard", "2. Click 'New Project'", "3. Import from GitHub: ufficient-platform", "4. Set Root Directory for Web: apps/web", "5. Set Root Directory for Admin: apps/admin", "6. Deploy both projects"],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true, 
+        "panel": "new"
+      }
+    },
+    {
+      "label": "📋 Check Deployment Status",
+      "type": "shell",
+      "command": "echo",
+      "args": ["Checking deployment URLs:", "Web: https://ufficient-web.vercel.app", "Admin: https://ufficient-admin.vercel.app"],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "new"
+      }
+    }
+  ]
+}
