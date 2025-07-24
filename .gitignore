@@ -1,1 +1,12 @@
 node_modules
+.vercel
+.next
+dist
+build
+*.log
+.env.local
+.env.production.local
+.env.development.local
+.DS_Store
+.expo/
+expo-env.d.ts
