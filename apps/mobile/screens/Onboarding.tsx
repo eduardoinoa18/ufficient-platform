@@ -233,39 +233,41 @@ export default function OnboardingScreen({ onComplete }: OnboardingProps) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      {/* Progress Bar */}
-      <View style={styles.progressContainer}>
-        <View style={styles.progressBar}>
-          <View style={[styles.progressFill, { width: `${(step / totalSteps) * 100}%` }]} />
+    <SafeAreaView edges={['top', 'right', 'bottom', 'left']}>
+      <View style={styles.container}>
+        {/* Progress Bar */}
+        <View style={styles.progressContainer}>
+          <View style={styles.progressBar}>
+            <View style={[styles.progressFill, { width: `${(step / totalSteps) * 100}%` }]} />
+          </View>
+          <Text style={styles.progressText}>{step} of {totalSteps}</Text>
         </View>
-        <Text style={styles.progressText}>{step} of {totalSteps}</Text>
-      </View>
 
-      <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
-        {renderStep()}
-      </ScrollView>
+        <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
+          {renderStep()}
+        </ScrollView>
 
-      {/* Navigation Buttons */}
-      <View style={styles.buttonContainer}>
-        {step > 1 && (
-          <TouchableOpacity style={styles.backButton} onPress={handleBack}>
-            <Text style={styles.backButtonText}>← Back</Text>
+        {/* Navigation Buttons */}
+        <View style={styles.buttonContainer}>
+          {step > 1 && (
+            <TouchableOpacity style={styles.backButton} onPress={handleBack}>
+              <Text style={styles.backButtonText}>← Back</Text>
+            </TouchableOpacity>
+          )}
+
+          <TouchableOpacity
+            style={[
+              styles.nextButton,
+              !canProceed() && styles.disabledButton
+            ]}
+            onPress={handleNext}
+            disabled={!canProceed()}
+          >
+            <Text style={styles.nextButtonText}>
+              {step === totalSteps ? '🚀 Start My Journey' : 'Continue →'}
+            </Text>
           </TouchableOpacity>
-        )}
-
-        <TouchableOpacity
-          style={[
-            styles.nextButton,
-            !canProceed() && styles.disabledButton
-          ]}
-          onPress={handleNext}
-          disabled={!canProceed()}
-        >
-          <Text style={styles.nextButtonText}>
-            {step === totalSteps ? '🚀 Start My Journey' : 'Continue →'}
-          </Text>
-        </TouchableOpacity>
+        </View>
       </View>
     </SafeAreaView>
   );
