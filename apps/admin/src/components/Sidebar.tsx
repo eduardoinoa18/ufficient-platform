@@ -26,36 +26,45 @@ export default function Sidebar({ activeTab, onTabChange }: { activeTab: string;
     };
 
     return (
-        <aside className="w-64 bg-white shadow-lg min-h-screen">
-            <div className="p-6 border-b border-gray-200">
-                <h2 className="text-xl font-montserrat font-bold text-[#6C00FF]">
-                    UFFICIENT Admin
-                </h2>
+        <aside className="w-64 bg-gradient-to-b from-[#29006E] to-[#6C00FF] shadow-xl min-h-screen relative">
+            <div className="p-6 border-b border-white/20">
+                <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 bg-gradient-to-r from-[#4CD7F8] to-white rounded-lg flex items-center justify-center">
+                        <span className="text-[#29006E] font-montserrat font-bold text-lg">U</span>
+                    </div>
+                    <h2 className="text-xl font-montserrat font-bold text-white">
+                        UFFICIENT
+                    </h2>
+                </div>
+                <p className="text-white/70 text-sm font-inter mt-1">Admin Portal</p>
             </div>
 
-            <nav className="mt-6">
+            <nav className="mt-6 px-3">
                 {menuItems.map((item) => {
                     const Icon = item.icon;
                     return (
                         <button
                             key={item.id}
                             onClick={() => onTabChange(item.id)}
-                            className={`w-full flex items-center gap-3 px-6 py-3 text-left hover:bg-[#F9F8FF] transition-colors ${activeTab === item.id
-                                ? 'bg-[#F9F8FF] text-[#6C00FF] border-r-2 border-[#6C00FF]'
-                                : 'text-gray-700'
+                            className={`w-full flex items-center gap-3 px-4 py-3 text-left rounded-xl transition-all duration-300 mb-1 ${activeTab === item.id
+                                ? 'bg-white/20 text-white shadow-lg backdrop-blur-sm border border-white/30'
+                                : 'text-white/80 hover:bg-white/10 hover:text-white'
                                 }`}
                         >
                             <Icon size={20} />
-                            <span className="font-medium">{item.label}</span>
+                            <span className="font-poppins font-medium">{item.label}</span>
                         </button>
                     );
                 })}
             </nav>
 
-            <div className="absolute bottom-6 left-6 right-6">
-                <button className="w-full flex items-center gap-3 px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors" onClick={handleLogout}>
+            <div className="absolute bottom-6 left-3 right-3">
+                <button
+                    className="w-full flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-red-500/20 hover:text-red-200 rounded-xl transition-all duration-300 border border-white/20"
+                    onClick={handleLogout}
+                >
                     <LogOut size={20} />
-                    <span className="font-medium">Logout</span>
+                    <span className="font-poppins font-medium">Logout</span>
                 </button>
             </div>
         </aside>

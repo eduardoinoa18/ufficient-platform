@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
-export async function GET(request: NextRequest) {
+export async function GET() {
     try {
         // Mock user data for V1 - in production this would come from your database
         const users = [
@@ -56,13 +56,11 @@ export async function GET(request: NextRequest) {
             }
         ];
 
-        // Filter by plan if specified
-        const { searchParams } = new URL(request.url);
-        const planFilter = searchParams.get('plan');
+        // Filter by plan if specified (V1: return all users for now)
+        // const { searchParams } = new URL(request.url);
+        // const planFilter = searchParams.get('plan');
 
-        const filteredUsers = planFilter
-            ? users.filter(user => user.plan.toLowerCase() === planFilter.toLowerCase())
-            : users;
+        const filteredUsers = users; // V1: No filtering for static generation
 
         return NextResponse.json({
             users: filteredUsers,
