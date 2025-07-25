@@ -1,12 +1,8 @@
 {
-  "buildCommand": "cd apps/admin && npm install && npm run build",
+  "name": "ufficient-admin",
+  "buildCommand": "npm run build:admin",
   "outputDirectory": "apps/admin/.next",
-  "installCommand": "npm install",
+  "installCommand": "npm install", 
   "framework": "nextjs",
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/apps/admin/$1"
-    }
-  ]
+  "rootDirectory": "apps/admin"
 }
