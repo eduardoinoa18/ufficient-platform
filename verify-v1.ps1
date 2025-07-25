@@ -49,7 +49,7 @@ Test-Component "Dependencies Installation" {
 Test-Component "Web App Build" {
     Push-Location "apps\web"
     try {
-        npm run build 2>&1
+        npm run build 2>&1 | Out-Null
         $success = $LASTEXITCODE -eq 0
         Pop-Location
         return $success
@@ -63,7 +63,7 @@ Test-Component "Web App Build" {
 Test-Component "Admin App Build" {
     Push-Location "apps\admin"
     try {
-        npm run build 2>&1
+        npm run build 2>&1 | Out-Null
         $success = $LASTEXITCODE -eq 0
         Pop-Location
         return $success
