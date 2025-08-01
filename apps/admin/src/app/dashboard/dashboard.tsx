@@ -51,8 +51,8 @@ export default function AdminDashboard() {
 
                 // Try to fetch from actual API endpoints
                 const responses = await Promise.allSettled([
-                    fetch('/api/admin/metrics'),
-                    fetch('/api/admin/users/recent'),
+                    fetch('/api/metrics'),
+                    fetch('/api/users'),
                 ]);
 
                 // If API calls fail, use fallback data for now

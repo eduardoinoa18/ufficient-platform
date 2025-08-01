@@ -40,7 +40,7 @@ export default function LandingPageManager() {
     const loadLandingPageConfig = async () => {
         try {
             // In real implementation, this would fetch from API
-            const response = await fetch('/api/admin/landing-page');
+            const response = await fetch('/api/landing');
             const data = await response.json();
             setConfig(data);
         } catch (error) {
@@ -81,7 +81,7 @@ export default function LandingPageManager() {
         try {
             setLoading(true);
             // In real implementation, this would save to API
-            await fetch('/api/admin/landing-page', {
+            await fetch('/api/landing', {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(config)
@@ -190,8 +190,8 @@ export default function LandingPageManager() {
                                         key={tab.id}
                                         onClick={() => setActiveTab(tab.id)}
                                         className={`w-full flex items-center px-3 py-2 text-sm font-medium rounded-md ${activeTab === tab.id
-                                                ? 'bg-purple-100 text-purple-700'
-                                                : 'text-gray-600 hover:bg-gray-100'
+                                            ? 'bg-purple-100 text-purple-700'
+                                            : 'text-gray-600 hover:bg-gray-100'
                                             }`}
                                     >
                                         <Icon className="h-5 w-5 mr-3" />

@@ -1,19 +1,11 @@
 "use client";
 
-import { useEffect } from 'react';
-
-export default function Error({
-    error,
-    reset,
-}: {
+interface ErrorPageProps {
     error: Error & { digest?: string };
     reset: () => void;
-}) {
-    useEffect(() => {
-        // Log the error to an error reporting service
-        console.error(error);
-    }, [error]);
+}
 
+export default function ErrorPage({ error, reset }: ErrorPageProps) {
     return (
         <div className="min-h-screen bg-gradient-to-br from-ufficient-purple to-ufficient-blue flex items-center justify-center">
             <div className="text-white text-center max-w-md mx-auto px-6">

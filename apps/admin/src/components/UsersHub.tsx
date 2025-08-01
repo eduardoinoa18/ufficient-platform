@@ -24,8 +24,8 @@ export default function UsersHub() {
     const fetchUsers = async () => {
         try {
             const url = filter === 'all'
-                ? '/api/admin/users'
-                : `/api/admin/users?plan=${filter}`;
+                ? '/api/users'
+                : `/api/users?plan=${filter}`;
             const res = await fetch(url);
             const data = await res.json();
             setUsers(data.users);
@@ -53,8 +53,8 @@ export default function UsersHub() {
                     <button
                         onClick={() => setFilter('all')}
                         className={`px-4 py-2 rounded-lg font-medium transition-colors ${filter === 'all'
-                                ? 'bg-[#6C00FF] text-white'
-                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                            ? 'bg-[#6C00FF] text-white'
+                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                             }`}
                     >
                         All Users
@@ -62,8 +62,8 @@ export default function UsersHub() {
                     <button
                         onClick={() => setFilter('free')}
                         className={`px-4 py-2 rounded-lg font-medium transition-colors ${filter === 'free'
-                                ? 'bg-[#6C00FF] text-white'
-                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                            ? 'bg-[#6C00FF] text-white'
+                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                             }`}
                     >
                         Free Plan
@@ -71,8 +71,8 @@ export default function UsersHub() {
                     <button
                         onClick={() => setFilter('pro')}
                         className={`px-4 py-2 rounded-lg font-medium transition-colors ${filter === 'pro'
-                                ? 'bg-[#6C00FF] text-white'
-                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                            ? 'bg-[#6C00FF] text-white'
+                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                             }`}
                     >
                         Pro Plan
@@ -116,8 +116,8 @@ export default function UsersHub() {
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${user.plan === 'Pro'
-                                                ? 'bg-[#6C00FF] text-white'
-                                                : 'bg-gray-100 text-gray-800'
+                                            ? 'bg-[#6C00FF] text-white'
+                                            : 'bg-gray-100 text-gray-800'
                                             }`}>
                                             {user.plan}
                                         </span>
