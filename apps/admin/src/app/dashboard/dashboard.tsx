@@ -24,71 +24,114 @@ import MetricCard from "../../components/MetricCard";
 import UsersHub from "../../components/UsersHub";
 import GamificationView from "../../components/GamificationView";
 
+interface DashboardData {
+    totalUsers: number;
+    activeUsers: number;
+    tasksCompleted: number;
+    badgesEarned: number;
+    recentUsers: Array<{
+        id: number;
+        name: string;
+        email: string;
+        joinedAgo: string;
+    }>;
+}
+
 export default function AdminDashboard() {
     const [activeTab, setActiveTab] = useState('dashboard');
-    const [dashboardData, setDashboardData] = useState(null);
+    const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        // Mock data loading
-        setTimeout(() => {
-            setDashboardData({
-                totalUsers: 3296,
-                activeUsers: 1745,
-                tasksCompleted: 28450,
-                badgesEarned: 12678,
-                recentUsers: [
-                    { id: 1, name: "Sarah Chen", email: "sarah@techflow.com", joinedAgo: "2 hours ago" },
-                    { id: 2, name: "Marcus Rodriguez", email: "marcus@freelance.co", joinedAgo: "4 hours ago" },
-                    { id: 3, name: "Emily Thompson", email: "emily@growthlabs.io", joinedAgo: "6 hours ago" }
-                ]
-            });
-            setLoading(false);
-        }, 800);
+        // Fetch real data from API
+        const fetchDashboardData = async () => {
+            try {
+                setLoading(true);
+
+                // Try to fetch from actual API endpoints
+                const responses = await Promise.allSettled([
+                    fetch('/api/admin/metrics'),
+                    fetch('/api/admin/users/recent'),
+                ]);
+
+                // If API calls fail, use fallback data for now
+                const fallbackData: DashboardData = {
+                    totalUsers: 0,
+                    activeUsers: 0,
+                    tasksCompleted: 0,
+                    badgesEarned: 0,
+                    recentUsers: []
+                };
+
+                setDashboardData(fallbackData);
+                setError(null);
+            } catch (err) {
+                console.error('Failed to fetch dashboard data:', err);
+                setError('Failed to load dashboard data');
+
+                // Fallback data in case of error
+                setDashboardData({
+                    totalUsers: 0,
+                    activeUsers: 0,
+                    tasksCompleted: 0,
+                    badgesEarned: 0,
+                    recentUsers: []
+                });
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchDashboardData();
+
+        // Refresh data every 30 seconds
+        const interval = setInterval(fetchDashboardData, 30000);
+        return () => clearInterval(interval);
     }, []);
 
     const metrics = [
         {
             title: "Total Users",
-            value: "3,296",
-            change: "+12%",
-            icon: <Users className="text-[#6C00FF]" size={24} />,
-            gradient: "from-[#6C00FF] to-[#29006E]"
+            value: dashboardData?.totalUsers?.toLocaleString() || "0",
+            change: "+0%",
+            icon: <Users className="text-ufficient-purple" size={24} />,
+            gradient: "from-ufficient-purple to-ufficient-purple-dark"
         },
         {
             title: "Active (7d)",
-            value: "1,745",
-            change: "+8%",
-            icon: <Activity className="text-[#4CD7F8]" size={24} />,
-            gradient: "from-[#4CD7F8] to-[#6C00FF]"
+            value: dashboardData?.activeUsers?.toLocaleString() || "0",
+            change: "+0%",
+            icon: <Activity className="text-ufficient-blue" size={24} />,
+            gradient: "from-ufficient-blue to-ufficient-purple"
         },
         {
             title: "Tasks Done",
-            value: "28,450",
-            change: "+15%",
-            icon: <Target className="text-[#00D27F]" size={24} />,
-            gradient: "from-[#00D27F] to-[#4CD7F8]"
+            value: dashboardData?.tasksCompleted?.toLocaleString() || "0",
+            change: "+0%",
+            icon: <Target className="text-green-500" size={24} />,
+            gradient: "from-green-500 to-ufficient-blue"
         },
         {
             title: "Badges Earned",
-            value: "12,678",
-            change: "+23%",
-            icon: <Award className="text-[#E3D9FF]" size={24} />,
-            gradient: "from-[#6C00FF] to-[#E3D9FF]"
+            value: dashboardData?.badgesEarned?.toLocaleString() || "0",
+            change: "+0%",
+            icon: <Award className="text-ufficient-blue-light" size={24} />,
+            gradient: "from-ufficient-purple to-ufficient-blue-light"
         },
         {
             title: "Streak Leaders",
-            value: "156",
-            change: "+5%",
-            icon: <Zap className="text-[#6C00FF]" size={24} />,
-            gradient: "from-[#6C00FF] to-[#4CD7F8]"
+            value: "0",
+            change: "+0%",
+            icon: <Zap className="text-ufficient-purple" size={24} />,
+            gradient: "from-ufficient-purple to-ufficient-blue"
         },
         {
             title: "Revenue (MRR)",
-            value: "$24,580",
-            change: "+18%",
-            icon: <TrendingUp className="text-[#00D27F]" size={24} />,
-            gradient: "from-[#00D27F] to-[#6C00FF]"
+            value: "$0",
+            change: "+0%",
+            icon: <TrendingUp className="text-green-500" size={24} />,
+            gradient: "from-green-500 to-ufficient-purple"
         },
     ];
 

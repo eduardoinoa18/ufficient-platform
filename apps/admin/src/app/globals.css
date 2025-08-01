@@ -1,28 +1,38 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+@layer base {
+  :root {
+    --font-inter: 'Inter', sans-serif;
+    --font-montserrat: 'Montserrat', sans-serif;
+    --font-poppins: 'Poppins', sans-serif;
+  }
+  
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html, body {
+    height: 100%;
+    font-family: var(--font-inter);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3 {
+    font-family: var(--font-poppins);
+  }
 }
 
-html, body {
-  height: 100%;
-  font-family: 'Inter', sans-serif;
-}
-
-h1, h2, h3 {
-  font-family: 'Poppins', sans-serif;
-}
-
-.font-montserrat {
-  font-family: 'Montserrat', sans-serif;
-}
-
-.gradient-bg {
-  background: linear-gradient(135deg, #6C00FF 0%, #4CD7F8 100%);
+@layer components {
+  .font-montserrat {
+    font-family: var(--font-montserrat);
+  }
+  
+  .gradient-bg {
+    background: linear-gradient(135deg, #6C00FF 0%, #4CD7F8 100%);
+  }
 }
