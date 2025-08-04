@@ -4,18 +4,24 @@
   "private": true,
   "description": "UFFICIENT APP - Unlock Your Most Efficient Self",
   "scripts": {
-    "dev": "npm run dev --workspace=apps/web",
-    "dev:web": "npm run dev --workspace=apps/web",
+    "dev": "turbo run dev",
+    "dev:landing": "npm run dev --workspace=apps/landing",
     "dev:admin": "npm run dev --workspace=apps/admin",
-    "dev:mobile": "npm run start --workspace=apps/mobile",
-    "build": "npm run build --workspace=apps/web && npm run build --workspace=apps/admin",
-    "build:web": "npm run build --workspace=apps/web",
+    "dev:mobile-pwa": "npm run dev --workspace=apps/mobile-pwa",
+    "dev:mobile-native": "npm run start --workspace=apps/mobile-native",
+    "build": "turbo run build",
+    "build:landing": "npm run build --workspace=apps/landing",
     "build:admin": "npm run build --workspace=apps/admin",
-    "build:mobile": "npm run build --workspace=apps/mobile",
-    "lint": "npm run lint --workspaces",
-    "type-check": "npm run type-check --workspaces",
-    "clean": "rm -rf node_modules && npm run clean --workspaces",
-    "install-all": "npm install && npm install --workspaces"
+    "build:mobile-pwa": "npm run build --workspace=apps/mobile-pwa",
+    "build:mobile-native": "npm run build --workspace=apps/mobile-native",
+    "lint": "turbo run lint",
+    "type-check": "turbo run type-check",
+    "test": "turbo run test",
+    "clean": "turbo run clean && rimraf node_modules",
+    "clean:cache": "turbo daemon clean",
+    "install-all": "npm install",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md}\""
   },
   "workspaces": [
     "apps/*",
@@ -23,9 +29,13 @@
   ],
   "devDependencies": {
     "@types/node": "^20.0.0",
-    "typescript": "^5.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
     "eslint": "^8.0.0",
-    "prettier": "^3.0.0"
+    "prettier": "^3.0.0",
+    "rimraf": "^5.0.0",
+    "turbo": "^2.5.5",
+    "typescript": "^5.0.0"
   },
   "engines": {
     "node": ">=18.0.0",
@@ -40,5 +50,10 @@
     "nextjs"
   ],
   "author": "UFFICIENT Team",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "axios": "^1.11.0"
+  }
 }

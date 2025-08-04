@@ -3,7 +3,7 @@ import { TaskCategory, TaskCategory as TC } from './types';
 // Task Categories
 export const TASK_CATEGORIES: TaskCategory[] = [
   'Work',
-  'Personal', 
+  'Personal',
   'Fitness',
   'Side Hustle',
   'Social'
@@ -48,13 +48,21 @@ export const BADGE_IDS = {
 
 // API Endpoints
 export const API_ENDPOINTS = {
+  // Admin endpoints
+  ADMIN: {
+    LOGIN: '/api/admin/login',
+    METRICS: '/api/admin/metrics',
+    USERS: '/api/admin/users',
+  },
+  // User endpoints
   USERS: '/api/users',
   TASKS: '/api/tasks',
   BADGES: '/api/badges',
   FEED: '/api/feed',
   ONBOARDING: '/api/onboarding',
   AI_TASKS: '/api/ai/tasks',
-  LEADERBOARD: '/api/leaderboard'
+  LEADERBOARD: '/api/leaderboard',
+  CONTACT: '/api/contact',
 } as const;
 
 // Error Messages
@@ -66,4 +74,40 @@ export const ERROR_MESSAGES = {
   BADGE_NOT_FOUND: 'Badge not found',
   ONBOARDING_INCOMPLETE: 'Onboarding not completed',
   AI_SERVICE_UNAVAILABLE: 'AI service temporarily unavailable'
+} as const;
+
+// UFFICIENT brand colors
+export const COLORS = {
+  PRIMARY: {
+    50: '#f0f3ff',
+    100: '#e0e7ff',
+    500: '#6C00FF',
+    600: '#5B00D9',
+    700: '#4A00B3',
+    900: '#29006E',
+  },
+  SECONDARY: {
+    400: '#4CD7F8',
+    500: '#2CC5F0',
+  },
+  GRADIENTS: {
+    PRIMARY: 'linear-gradient(135deg, #6C00FF 0%, #4CD7F8 100%)',
+    HERO: 'linear-gradient(135deg, #29006E 0%, #6C00FF 50%, #4CD7F8 100%)',
+  },
+} as const;
+
+// Fonts
+export const FONTS = {
+  PRIMARY: 'Montserrat',
+  SECONDARY: 'Poppins',
+  BODY: 'Inter',
+  MONO: 'Roboto Mono',
+} as const;
+
+// App configurations
+export const APP_CONFIG = {
+  LANDING_PORT: 3000,
+  ADMIN_PORT: 3001,
+  MOBILE_PWA_PORT: 3002,
+  MOBILE_NATIVE_PORT: 19000,
 } as const;

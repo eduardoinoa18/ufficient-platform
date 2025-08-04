@@ -1,0 +1,4 @@
+2025-08-04T11:44:37.154950Z  WARN turborepo_filewatch: failed to remove cookie file failed to remove file `C:\Users\eduar\OneDrive\Desktop\Ufficient APP\.turbo\cookies\.turbo-cookie`
+2025-08-04T11:44:37.278087Z  WARN daemon_server: turborepo_lib::commands::daemon: daemon already running
+2025-08-04T11:44:37.359220Z  WARN daemon_server: turborepo_lib::commands::daemon: daemon already running
+2025-08-04T13:35:05.396820Z  WARN daemon_server: turborepo_lib::commands::daemon: daemon already running

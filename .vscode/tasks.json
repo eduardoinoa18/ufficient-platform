@@ -7,7 +7,7 @@
 			"command": "npm",
 			"args": [
 				"run",
-				"dev:web"
+				"dev:landing"
 			],
 			"group": "build",
 			"isBackground": true,
@@ -34,7 +34,7 @@
 			"label": "Dev: Start Mobile App",
 			"type": "shell",
 			"command": "npm",
-			"args": ["run", "dev:mobile"],
+			"args": ["run", "dev:mobile-pwa"],
 			"group": "build",
 			"isBackground": true,
 			"problemMatcher": [],
@@ -62,6 +62,18 @@
 			"command": "npm",
 			"args": ["run", "install-all"],
 			"group": "build",
+			"problemMatcher": [],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			}
+		},
+		{
+			"label": "Dev: Start Native App",
+			"type": "shell",
+			"command": "npm",
+			"args": ["run", "dev:mobile-native"],
+			"group": "build",
+			"isBackground": true,
 			"problemMatcher": [],
 			"options": {
 				"cwd": "${workspaceFolder}"

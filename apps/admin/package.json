@@ -10,7 +10,8 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@next/font": "14.0.0",
+    "@ufficient/core": "../../packages/core",
+    "@ufficient/ui": "../../packages/ui",
     "@types/bcryptjs": "^2.4.6",
     "@types/jsonwebtoken": "^9.0.10",
     "autoprefixer": "^10.0.1",

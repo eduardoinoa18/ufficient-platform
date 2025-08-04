@@ -1,0 +1,121 @@
+name: Deploy Ufficient V1
+on:  
+  push: 
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with: 
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: Install Dependencies
+        run: npm ci
+        
+      - name: Type Check
+        run: npm run type-check
+        
+      - name: Lint Code
+        run: npm run lint
+        
+      - name: Build Landing Page
+        run: npm run build --workspace=apps/landing
+        env:
+          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+          
+      - name: Build Admin Dashboard
+        run: npm run build --workspace=apps/admin
+        env:
+          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          
+      - name: Build Mobile PWA
+        run: npm run build --workspace=apps/mobile-pwa
+        env:
+          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+          
+      - name: Deploy Landing to Vercel
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_LANDING_PROJECT_ID }}
+          working-directory: ./apps/landing
+          vercel-args: '--prod'
+          
+      - name: Deploy Admin to Vercel
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_ADMIN_PROJECT_ID }}
+          working-directory: ./apps/admin
+          vercel-args: '--prod'
+          
+      - name: Deploy Mobile PWA to Vercel
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PWA_PROJECT_ID }}
+          working-directory: ./apps/mobile-pwa
+          vercel-args: '--prod'
+
+  native-app-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with: 
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: Install Dependencies
+        run: npm ci
+        
+      - name: Setup Expo CLI
+        run: npm install -g @expo/cli
+        
+      - name: Check Native App Build
+        run: |
+          cd apps/mobile-native
+          expo export --check
+          
+      - name: Build Native App (if main branch)
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+        run: |
+          cd apps/mobile-native
+          # eas build --platform=all --non-interactive
+          # Commented out for now - enable when ready for app store deployment
+          echo "Native app build check completed"
+
+  notification:
+    needs: [build-and-deploy, native-app-check]
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Notify Deployment Status
+        run: |
+          if [ "${{ needs.build-and-deploy.result }}" == "success" ]; then
+            echo "✅ UFFICIENT V1 deployed successfully!"
+            echo "🌐 Landing: https://ufficient.app"
+            echo "🔧 Admin: https://admin.ufficient.app"  
+            echo "📱 PWA: https://app.ufficient.app"
+          else
+            echo "❌ Deployment failed"
+          fi

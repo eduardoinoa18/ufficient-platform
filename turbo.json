@@ -1,0 +1,43 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": [".next/**", "!.next/cache/**", "dist/**", "build/**"],
+      "env": ["NODE_ENV", "NEXT_PUBLIC_*", "EXPO_PUBLIC_*"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true,
+      "env": ["NODE_ENV", "NEXT_PUBLIC_*", "EXPO_PUBLIC_*"]
+    },
+    "lint": {
+      "dependsOn": ["^build"],
+      "outputs": ["eslint-report.json"]
+    },
+    "type-check": {
+      "dependsOn": ["^build"],
+      "outputs": ["tsconfig.tsbuildinfo"]
+    },
+    "test": {
+      "dependsOn": ["^build"],
+      "outputs": ["coverage/**"],
+      "env": ["NODE_ENV"]
+    },
+    "clean": {
+      "cache": false
+    }
+  },
+  "globalDependencies": [
+    "package.json",
+    "turbo.json",
+    "tsconfig.json",
+    ".env*"
+  ],
+  "globalEnv": [
+    "NODE_ENV",
+    "VERCEL_*",
+    "NEXT_PUBLIC_*",
+    "EXPO_PUBLIC_*"
+  ]
+}
