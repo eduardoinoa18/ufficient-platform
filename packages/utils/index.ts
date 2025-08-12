@@ -1,8 +1,19 @@
-// UFFICIENT Utility Functions
-export * from './src/analytics';
+// UFFICIENT Utility Functions - Fixed Export Conflicts
 export * from './src/auth';
 export * from './src/api';
-export * from './src/logging';
+
+// Analytics with unique naming to avoid conflicts
+export type { TrackingEvent as AnalyticsEvent } from './src/analytics';
+export { trackEvent as trackAnalyticsEvent } from './src/analytics';
+
+// Logging utilities (separate namespace)
+export {
+    trackEvent as logEvent,
+    EventTypes,
+    trackUserAction,
+    trackTaskAction,
+    trackGamificationEvent
+} from './src/logging';
 
 export const formatNumber = (num: number): string => {
     return new Intl.NumberFormat().format(num);
@@ -67,4 +78,29 @@ export const debounce = <T extends (...args: any[]) => any>(
 
 export const cn = (...classes: (string | undefined | null | false)[]): string => {
     return classes.filter(Boolean).join(' ');
+};
+
+// UFFICIENT-specific utilities
+export const calculateStreakDays = (lastCompletionDate: Date | string): number => {
+    const last = new Date(lastCompletionDate);
+    const today = new Date();
+    const diffTime = today.getTime() - last.getTime();
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    return Math.max(0, diffDays);
+};
+
+export const formatTaskPoints = (points: number): string => {
+    if (points >= 1000) {
+        return `${(points / 1000).toFixed(1)}k`;
+    }
+    return points.toString();
+};
+
+export const validateEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+};
+
+export const generateTaskId = (): string => {
+    return `task_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
 };

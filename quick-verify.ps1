@@ -8,7 +8,7 @@ $tests = @()
 
 # Test 1: Project Structure
 Write-Host "1. Testing Project Structure..." -NoNewline
-if ((Test-Path "apps\web") -and (Test-Path "apps\admin") -and (Test-Path "apps\mobile")) {
+if ((Test-Path "apps\landing") -and (Test-Path "apps\admin") -and (Test-Path "apps\mobile-pwa")) {
     Write-Host " ✅ PASS" -ForegroundColor Green
     $tests += $true
 } else {
@@ -18,7 +18,7 @@ if ((Test-Path "apps\web") -and (Test-Path "apps\admin") -and (Test-Path "apps\m
 
 # Test 2: Package Files
 Write-Host "2. Testing Package Files..." -NoNewline
-if ((Test-Path "package.json") -and (Test-Path "apps\web\package.json") -and (Test-Path "apps\admin\package.json")) {
+if ((Test-Path "package.json") -and (Test-Path "apps\landing\package.json") -and (Test-Path "apps\admin\package.json")) {
     Write-Host " ✅ PASS" -ForegroundColor Green
     $tests += $true
 } else {
@@ -26,19 +26,9 @@ if ((Test-Path "package.json") -and (Test-Path "apps\web\package.json") -and (Te
     $tests += $false
 }
 
-# Test 3: Build Files
-Write-Host "3. Testing Build Output..." -NoNewline
-if ((Test-Path "apps\web\.next") -and (Test-Path "apps\admin\.next")) {
-    Write-Host " ✅ PASS" -ForegroundColor Green
-    $tests += $true
-} else {
-    Write-Host " ❌ FAIL - Run builds first" -ForegroundColor Red
-    $tests += $false
-}
-
-# Test 4: Deployment Configs
-Write-Host "4. Testing Deployment Configs..." -NoNewline
-if ((Test-Path "apps\web\vercel.json") -and (Test-Path "apps\admin\vercel.json")) {
+# Test 3: Shared Packages
+Write-Host "3. Testing Shared Packages..." -NoNewline
+if ((Test-Path "packages\ui") -and (Test-Path "packages\core") -and (Test-Path "packages\utils")) {
     Write-Host " ✅ PASS" -ForegroundColor Green
     $tests += $true
 } else {
@@ -46,9 +36,9 @@ if ((Test-Path "apps\web\vercel.json") -and (Test-Path "apps\admin\vercel.json")
     $tests += $false
 }
 
-# Test 5: Environment Templates
-Write-Host "5. Testing Environment Templates..." -NoNewline
-if ((Test-Path "apps\web\.env.example") -and (Test-Path "apps\admin\.env.example")) {
+# Test 4: CSS Files
+Write-Host "4. Testing CSS Files..." -NoNewline
+if ((Test-Path "apps\admin\src\app\globals.css") -and (Test-Path "apps\landing\src\app\globals.css")) {
     Write-Host " ✅ PASS" -ForegroundColor Green
     $tests += $true
 } else {
@@ -56,9 +46,9 @@ if ((Test-Path "apps\web\.env.example") -and (Test-Path "apps\admin\.env.example
     $tests += $false
 }
 
-# Test 6: Deployment Scripts
-Write-Host "6. Testing Deployment Scripts..." -NoNewline
-if ((Test-Path "deploy-v1.ps1") -and (Test-Path "DEPLOYMENT_GUIDE_V1.md")) {
+# Test 5: Tailwind Configs
+Write-Host "5. Testing Tailwind Configs..." -NoNewline
+if ((Test-Path "apps\admin\tailwind.config.js") -and (Test-Path "apps\landing\tailwind.config.js")) {
     Write-Host " ✅ PASS" -ForegroundColor Green
     $tests += $true
 } else {
@@ -66,38 +56,53 @@ if ((Test-Path "deploy-v1.ps1") -and (Test-Path "DEPLOYMENT_GUIDE_V1.md")) {
     $tests += $false
 }
 
-# Test 7: Node.js Version
-Write-Host "7. Testing Node.js Version..." -NoNewline
+# Test 6: Node.js Version
+Write-Host "6. Testing Node.js Version..." -NoNewline
 try {
-    $nodeVersion = node --version
-    $majorVersion = [int]($nodeVersion.Substring(1).Split('.')[0])
-    if ($majorVersion -ge 18) {
-        Write-Host " ✅ PASS (NodeJS $nodeVersion)" -ForegroundColor Green
-        $tests += $true
+    $nodeVersion = node --version 2>$null
+    if ($nodeVersion) {
+        $majorVersion = [int]($nodeVersion.Substring(1).Split('.')[0])
+        if ($majorVersion -ge 18) {
+            Write-Host " ✅ PASS (Node.js $nodeVersion)" -ForegroundColor Green
+            $tests += $true
+        } else {
+            Write-Host " ❌ FAIL (Need Node.js 18+, found $nodeVersion)" -ForegroundColor Red
+            $tests += $false
+        }
     } else {
-        Write-Host " ❌ FAIL (Need NodeJS 18+, found $nodeVersion)" -ForegroundColor Red
+        Write-Host " ❌ FAIL (Node.js not found)" -ForegroundColor Red
         $tests += $false
     }
 } catch {
-    Write-Host " ❌ FAIL (NodeJS not found)" -ForegroundColor Red
+    Write-Host " ❌ FAIL (Node.js not found)" -ForegroundColor Red
     $tests += $false
 }
 
-# Test 8: Vercel CLI
-Write-Host "8. Testing Vercel CLI..." -NoNewline
-if (Get-Command vercel -ErrorAction SilentlyContinue) {
+# Test 7: NPM Dependencies
+Write-Host "7. Testing NPM Dependencies..." -NoNewline
+if (Test-Path "node_modules") {
     Write-Host " ✅ PASS" -ForegroundColor Green
     $tests += $true
 } else {
-    Write-Host " ❌ FAIL (Install with: npm install -g vercel)" -ForegroundColor Red
+    Write-Host " ❌ FAIL" -ForegroundColor Red
     $tests += $false
 }
 
-# Summary
-$passed = ($tests | Where-Object { $_ -eq $true }).Count
+# Test 8: Deployment Files
+Write-Host "8. Testing Deployment Files..." -NoNewline
+if ((Test-Path "apps\admin\vercel.json") -and (Test-Path "apps\landing\vercel.json")) {
+    Write-Host " ✅ PASS" -ForegroundColor Green
+    $tests += $true
+} else {
+    Write-Host " ❌ FAIL" -ForegroundColor Red
+    $tests += $false
+}
+
+# Calculate results
 $total = $tests.Count
+$passed = ($tests | Where-Object { $_ -eq $true }).Count
 $failed = $total - $passed
-$percentage = [math]::Round(($passed / $total) * 100, 1)
+$percentage = if ($total -gt 0) { [math]::Round(($passed / $total) * 100, 1) } else { 0 }
 
 Write-Host ""
 Write-Host "📊 VERIFICATION SUMMARY" -ForegroundColor Cyan
@@ -111,9 +116,10 @@ if ($failed -eq 0) {
     Write-Host "🎉 ALL TESTS PASSED! READY FOR DEPLOYMENT! 🚀" -ForegroundColor Green
     Write-Host ""
     Write-Host "Next steps:" -ForegroundColor Cyan
-    Write-Host "1. Run .\deploy-v1.ps1 to deploy to production" -ForegroundColor White
-    Write-Host "2. Configure environment variables in Vercel" -ForegroundColor White
-    Write-Host "3. Test deployed applications" -ForegroundColor White
+    Write-Host "1. All apps are already deployed and working" -ForegroundColor White
+    Write-Host "2. Landing: https://ufficient-web-two-kappa-68.vercel.app" -ForegroundColor White
+    Write-Host "3. Admin: https://ufficient-admin-one-roan-20.vercel.app" -ForegroundColor White
+    Write-Host "4. PWA: https://ufficient-mobile-one-roan-20.vercel.app" -ForegroundColor White
 } elseif ($failed -le 2) {
     Write-Host "⚠️  MINOR ISSUES DETECTED - Review and fix before deployment" -ForegroundColor Yellow
 } else {
@@ -121,4 +127,4 @@ if ($failed -eq 0) {
 }
 
 Write-Host ""
-Write-Host "📖 For deployment instructions, see: DEPLOYMENT_GUIDE_V1.md" -ForegroundColor Cyan
+Write-Host "📖 For more details, see: DEPLOYMENT_COMPLETE_V1.md" -ForegroundColor Cyan

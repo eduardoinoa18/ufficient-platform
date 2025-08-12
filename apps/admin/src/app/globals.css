@@ -2,11 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Poppins:wght@400;500;600&family=Inter:wght@300;400;500&family=Roboto:wght@300;400&display=swap');
+
 @layer base {
   :root {
     --font-inter: 'Inter', sans-serif;
     --font-montserrat: 'Montserrat', sans-serif;
     --font-poppins: 'Poppins', sans-serif;
+    --font-roboto: 'Roboto', sans-serif;
+    
+    /* UFFICIENT Brand Colors */
+    --violet: #6C00FF;
+    --mint: #4CD7F8;
+    --indigo: #29006E;
+    --lilac: #E3D9FF;
+    --slate: #616161;
+    --success: #00D27F;
+    --alert: #FF4B4B;
   }
   
   * {
@@ -18,12 +30,30 @@
   html, body {
     height: 100%;
     font-family: var(--font-inter);
+    background: linear-gradient(135deg, var(--indigo) 0%, var(--violet) 100%);
+    min-height: 100vh;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
   h1, h2, h3 {
     font-family: var(--font-poppins);
+  }
+
+  .logo-font {
+    font-family: var(--font-montserrat);
+  }
+
+  .heading-font {
+    font-family: var(--font-poppins);
+  }
+
+  .body-font {
+    font-family: var(--font-inter);
+  }
+
+  .caption-font {
+    font-family: var(--font-roboto);
   }
 }
 
