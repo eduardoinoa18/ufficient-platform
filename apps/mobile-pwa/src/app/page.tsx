@@ -2,13 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { CheckCircle, Clock, Trophy, Flame, Plus, User, BarChart3 } from 'lucide-react';
-
-interface Task {
-    id: string;
-    title: string;
-    completed: boolean;
-    streak?: number;
-}
+import type { Task } from '@ufficient/core';
 
 export default function MobilePWAPage() {
     const userId = 'demo-user'; // Replace with real auth user when auth is added
@@ -34,8 +28,8 @@ export default function MobilePWAPage() {
         const title = prompt('New task title');
         if (!title) return;
 
-        const optimistic: Task = { id: `temp_${Date.now()}`, title, completed: false };
-        setTasks((prev) => [optimistic, ...prev]);
+        const optimistic: Task = { id: `temp_${Date.now()}`, userId, title, completed: false, category: 'Work', createdAt: new Date(), updatedAt: new Date(), difficulty: 'easy', priority: 'medium', points: 0, aiGenerated: false } as Task;
+        setTasks((prev) => [optimistic as Task, ...prev]);
 
         try {
             const res = await fetch('/api/tasks', {
@@ -131,8 +125,8 @@ export default function MobilePWAPage() {
                                         <button
                                             onClick={() => toggleTask(task.id)}
                                             className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${task.completed
-                                                    ? 'bg-green-500 border-green-500 text-white'
-                                                    : 'border-gray-300 hover:border-primary-500'
+                                                ? 'bg-green-500 border-green-500 text-white'
+                                                : 'border-gray-300 hover:border-primary-500'
                                                 }`}
                                         >
                                             {task.completed && <CheckCircle className="w-4 h-4" />}

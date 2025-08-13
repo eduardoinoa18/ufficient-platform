@@ -9,7 +9,5 @@ export async function POST(request: NextRequest) {
 }
 
 export async function deprecatedGET() {
-    return NextResponse.json({
-        error: 'Deprecated endpoint. Use /api/metrics instead.'
-    }, { status: 410 });
+    return NextResponse.json({ error: 'Deprecated. Use /api/metrics' }, { status: 410 });
 }

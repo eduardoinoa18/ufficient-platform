@@ -2,8 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Poppins:wght@400;500;600&family=Inter:wght@300;400;500&family=Roboto:wght@300;400&display=swap');
-
 @layer base {
   :root {
     --font-inter: 'Inter', sans-serif;
@@ -54,6 +52,11 @@
 
   .caption-font {
     font-family: var(--font-roboto);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--mint);
+    outline-offset: 2px;
   }
 }
 
