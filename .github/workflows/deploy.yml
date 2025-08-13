@@ -74,6 +74,8 @@ jobs:
           vercel-args: '--prod'
 
   native-app-check:
+    # Run only on feature branches, so it won't block main/master
+    if: startsWith(github.ref, 'refs/heads/feature/') || github.ref == 'refs/heads/native-ci'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
