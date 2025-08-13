@@ -1,48 +1,51 @@
 name: Deploy Ufficient V1
-on:  
-  push: 
+on:
+  push:
     branches: [main, master]
   pull_request:
     branches: [main, master]
+  workflow_dispatch:
+    inputs:
+      target:
+        description: "Which app to deploy"
+        required: false
+        default: "all"
+        type: choice
+        options:
+          - all
+          - landing
+          - admin
+          - pwa
 
 jobs:
-  build-and-deploy:
+  deploy-landing:
+    name: Build & Deploy Landing
     runs-on: ubuntu-latest
+    if: ${{ github.event_name != 'workflow_dispatch' || inputs.target == 'landing' || inputs.target == 'all' }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-        
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
-        with: 
+        with:
           node-version: '18'
           cache: 'npm'
-          
+
       - name: Install Dependencies
         run: npm ci
-        
-      - name: Type Check
-        run: npm run type-check
-        
-      - name: Lint Code
-        run: npm run lint
-        
-      - name: Build Landing Page
+
+      - name: Type Check (Landing)
+        run: npm run type-check --workspace=apps/landing
+
+      - name: Lint (Landing)
+        run: npm run lint --workspace=apps/landing
+
+      - name: Build (Landing)
         run: npm run build --workspace=apps/landing
         env:
           NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
-          
-      - name: Build Admin Dashboard
-        run: npm run build --workspace=apps/admin
-        env:
-          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          
-      - name: Build Mobile PWA
-        run: npm run build --workspace=apps/mobile-pwa
-        env:
-          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
-          
+
       - name: Deploy Landing to Vercel
         if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
         uses: amondnet/vercel-action@v25
@@ -52,7 +55,42 @@ jobs:
           vercel-project-id: ${{ secrets.VERCEL_LANDING_PROJECT_ID }}
           working-directory: ./apps/landing
           vercel-args: '--prod'
-          
+
+  deploy-admin:
+    name: Build & Deploy Admin
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name != 'workflow_dispatch' || inputs.target == 'admin' || inputs.target == 'all' }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Type Check (Admin)
+        run: npm run type-check --workspace=apps/admin
+
+      - name: Lint (Admin)
+        run: npm run lint --workspace=apps/admin
+
+      - name: Build (Admin)
+        run: npm run build --workspace=apps/admin
+        env:
+          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+          FIREBASE_PRIVATE_KEY_ID: ${{ secrets.FIREBASE_PRIVATE_KEY_ID }}
+          FIREBASE_PRIVATE_KEY: ${{ secrets.FIREBASE_PRIVATE_KEY }}
+          FIREBASE_CLIENT_EMAIL: ${{ secrets.FIREBASE_CLIENT_EMAIL }}
+          FIREBASE_CLIENT_ID: ${{ secrets.FIREBASE_CLIENT_ID }}
+          FIREBASE_CLIENT_CERT_URL: ${{ secrets.FIREBASE_CLIENT_CERT_URL }}
+
       - name: Deploy Admin to Vercel
         if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
         uses: amondnet/vercel-action@v25
@@ -62,8 +100,36 @@ jobs:
           vercel-project-id: ${{ secrets.VERCEL_ADMIN_PROJECT_ID }}
           working-directory: ./apps/admin
           vercel-args: '--prod'
-          
-      - name: Deploy Mobile PWA to Vercel
+
+  deploy-pwa:
+    name: Build & Deploy PWA
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name != 'workflow_dispatch' || inputs.target == 'pwa' || inputs.target == 'all' }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Type Check (PWA)
+        run: npm run type-check --workspace=apps/mobile-pwa
+
+      - name: Lint (PWA)
+        run: npm run lint --workspace=apps/mobile-pwa
+
+      - name: Build (PWA)
+        run: npm run build --workspace=apps/mobile-pwa
+        env:
+          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+
+      - name: Deploy PWA to Vercel
         if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
         uses: amondnet/vercel-action@v25
         with:
@@ -73,51 +139,10 @@ jobs:
           working-directory: ./apps/mobile-pwa
           vercel-args: '--prod'
 
+  # Disable native app build for now
   native-app-check:
-    # Run only on feature branches, so it won't block main/master
-    if: startsWith(github.ref, 'refs/heads/feature/') || github.ref == 'refs/heads/native-ci'
+    if: false
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-        
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with: 
-          node-version: '18'
-          cache: 'npm'
-          
-      - name: Install Dependencies
-        run: npm ci
-        
-      - name: Setup Expo CLI
-        run: npm install -g @expo/cli
-        
-      - name: Check Native App Build
-        run: |
-          cd apps/mobile-native
-          expo export --check
-          
-      - name: Build Native App (if main branch)
-        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
-        run: |
-          cd apps/mobile-native
-          # eas build --platform=all --non-interactive
-          # Commented out for now - enable when ready for app store deployment
-          echo "Native app build check completed"
-
-  notification:
-    needs: [build-and-deploy, native-app-check]
-    runs-on: ubuntu-latest
-    if: always()
-    steps:
-      - name: Notify Deployment Status
-        run: |
-          if [ "${{ needs.build-and-deploy.result }}" == "success" ]; then
-            echo "✅ UFFICIENT V1 deployed successfully!"
-            echo "🌐 Landing: https://ufficient.app"
-            echo "🔧 Admin: https://admin.ufficient.app"  
-            echo "📱 PWA: https://app.ufficient.app"
-          else
-            echo "❌ Deployment failed"
-          fi
+      - name: Skipped
+        run: echo "Native app build is disabled for now"
