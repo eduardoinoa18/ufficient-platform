@@ -7,44 +7,62 @@ interface Task {
     id: string;
     title: string;
     completed: boolean;
-    streak: number;
-}
-
-interface Badge {
-    id: string;
-    name: string;
-    description: string;
-    icon: string;
-    earned: boolean;
+    streak?: number;
 }
 
 export default function MobilePWAPage() {
-    const [tasks, setTasks] = useState<Task[]>([
-        { id: '1', title: 'Morning Exercise', completed: false, streak: 5 },
-        { id: '2', title: 'Read for 30 minutes', completed: true, streak: 12 },
-        { id: '3', title: 'Meditate', completed: false, streak: 3 },
-    ]);
+    const userId = 'demo-user'; // Replace with real auth user when auth is added
+    const [tasks, setTasks] = useState<Task[]>([]);
+    const [loading, setLoading] = useState(true);
 
-    const [badges] = useState<Badge[]>([
-        { id: '1', name: 'Early Bird', description: 'Complete morning routine 7 days straight', icon: '🌅', earned: true },
-        { id: '2', name: 'Bookworm', description: 'Read for 10 days in a row', icon: '📚', earned: true },
-        { id: '3', name: 'Zen Master', description: 'Meditate for 30 days', icon: '🧘', earned: false },
-    ]);
+    useEffect(() => {
+        const fetchTasks = async () => {
+            try {
+                const res = await fetch(`/api/tasks?userId=${userId}`);
+                const data = await res.json();
+                setTasks(data.items || []);
+            } catch (e) {
+                console.warn('Failed to load tasks', e);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchTasks();
+    }, []);
 
-    const [currentStreak, setCurrentStreak] = useState(12);
-    const [totalPoints, setTotalPoints] = useState(2450);
+    const addTask = async () => {
+        const title = prompt('New task title');
+        if (!title) return;
 
-    const toggleTask = (taskId: string) => {
-        setTasks(prev => prev.map(task =>
-            task.id === taskId
-                ? { ...task, completed: !task.completed }
-                : task
-        ));
+        const optimistic: Task = { id: `temp_${Date.now()}`, title, completed: false };
+        setTasks((prev) => [optimistic, ...prev]);
+
+        try {
+            const res = await fetch('/api/tasks', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId, title }),
+            });
+            const data = await res.json();
+            if (data.id) {
+                setTasks((prev) => prev.map((t) => (t.id === optimistic.id ? { ...t, id: data.id } : t)));
+            }
+        } catch (e) {
+            console.error('Failed to create task', e);
+        }
     };
 
-    const completedToday = tasks.filter(task => task.completed).length;
-    const totalTasks = tasks.length;
+    const toggleTask = async (taskId: string) => {
+        setTasks((prev) => prev.map((t) => (t.id === taskId ? { ...t, completed: !t.completed } : t)));
+        // Optionally call a complete endpoint later
+    };
+
+    const completedToday = tasks.filter((task) => task.completed).length;
+    const totalTasks = tasks.length || 1;
     const progressPercentage = (completedToday / totalTasks) * 100;
+
+    const currentStreak = 0;
+    const totalPoints = tasks.reduce((acc, t) => acc + (t.completed ? 10 : 0), 0);
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-primary-50 to-white">
@@ -71,7 +89,9 @@ export default function MobilePWAPage() {
                     <h2 className="text-lg font-semibold text-gray-800 mb-3">Today's Progress</h2>
                     <div className="flex items-center justify-between mb-2">
                         <span className="text-sm text-gray-600">Tasks Completed</span>
-                        <span className="text-sm font-medium">{completedToday}/{totalTasks}</span>
+                        <span className="text-sm font-medium">
+                            {completedToday}/{totalTasks}
+                        </span>
                     </div>
                     <div className="w-full bg-gray-200 rounded-full h-3 mb-3">
                         <div
@@ -96,55 +116,39 @@ export default function MobilePWAPage() {
             <div className="px-4 mb-6">
                 <div className="flex items-center justify-between mb-4">
                     <h2 className="text-xl font-semibold text-gray-800">Today's Tasks</h2>
-                    <button className="p-2 bg-primary-500 text-white rounded-lg">
+                    <button onClick={addTask} className="p-2 bg-primary-500 text-white rounded-lg">
                         <Plus className="w-5 h-5" />
                     </button>
                 </div>
-                <div className="space-y-3">
-                    {tasks.map((task) => (
-                        <div key={task.id} className="bg-white rounded-lg shadow-md p-4">
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-3">
-                                    <button
-                                        onClick={() => toggleTask(task.id)}
-                                        className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors
-                      ${task.completed
-                                                ? 'bg-green-500 border-green-500 text-white'
-                                                : 'border-gray-300 hover:border-primary-500'
-                                            }`}
-                                    >
-                                        {task.completed && <CheckCircle className="w-4 h-4" />}
-                                    </button>
-                                    <div>
-                                        <p className={`font-medium ${task.completed ? 'line-through text-gray-500' : 'text-gray-800'}`}>
-                                            {task.title}
-                                        </p>
-                                        <div className="flex items-center gap-1 text-sm text-orange-600">
-                                            <Flame className="w-3 h-3" />
-                                            <span>{task.streak} day streak</span>
+                {loading ? (
+                    <div className="text-center text-gray-500">Loading...</div>
+                ) : (
+                    <div className="space-y-3">
+                        {tasks.map((task) => (
+                            <div key={task.id} className="bg-white rounded-lg shadow-md p-4">
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-3">
+                                        <button
+                                            onClick={() => toggleTask(task.id)}
+                                            className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${task.completed
+                                                    ? 'bg-green-500 border-green-500 text-white'
+                                                    : 'border-gray-300 hover:border-primary-500'
+                                                }`}
+                                        >
+                                            {task.completed && <CheckCircle className="w-4 h-4" />}
+                                        </button>
+                                        <div>
+                                            <p className={`font-medium ${task.completed ? 'line-through text-gray-500' : 'text-gray-800'}`}>
+                                                {task.title}
+                                            </p>
                                         </div>
                                     </div>
+                                    <Clock className="w-5 h-5 text-gray-400" />
                                 </div>
-                                <Clock className="w-5 h-5 text-gray-400" />
                             </div>
-                        </div>
-                    ))}
-                </div>
-            </div>
-
-            {/* Badges Section */}
-            <div className="px-4 mb-6">
-                <h2 className="text-xl font-semibold text-gray-800 mb-4">Achievements</h2>
-                <div className="grid grid-cols-2 gap-3">
-                    {badges.map((badge) => (
-                        <div key={badge.id} className={`bg-white rounded-lg shadow-md p-4 ${!badge.earned ? 'opacity-50' : ''}`}>
-                            <div className="text-3xl mb-2">{badge.icon}</div>
-                            <h3 className="font-semibold text-gray-800 text-sm">{badge.name}</h3>
-                            <p className="text-xs text-gray-600">{badge.description}</p>
-                            {badge.earned && <div className="mt-2 text-xs text-green-600 font-medium">Earned!</div>}
-                        </div>
-                    ))}
-                </div>
+                        ))}
+                    </div>
+                )}
             </div>
 
             {/* Bottom Navigation */}
@@ -157,10 +161,6 @@ export default function MobilePWAPage() {
                     <button className="flex flex-col items-center p-2 text-gray-400">
                         <BarChart3 className="w-6 h-6" />
                         <span className="text-xs mt-1">Stats</span>
-                    </button>
-                    <button className="flex flex-col items-center p-2 text-gray-400">
-                        <Trophy className="w-6 h-6" />
-                        <span className="text-xs mt-1">Badges</span>
                     </button>
                     <button className="flex flex-col items-center p-2 text-gray-400">
                         <User className="w-6 h-6" />

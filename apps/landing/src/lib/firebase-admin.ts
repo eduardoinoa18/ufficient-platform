@@ -1,4 +1,4 @@
-// Firebase Admin SDK configuration for Admin app
+// Firebase Admin SDK configuration for Landing app
 import admin from 'firebase-admin';
 
 const serviceAccountKey = {
@@ -25,7 +25,7 @@ if (!admin.apps.length) {
             projectId: process.env.FIREBASE_PROJECT_ID,
         });
     } else {
-        console.warn('[Admin] Firebase Admin not initialized: missing credentials');
+        console.warn('[Landing] Firebase Admin not initialized: missing credentials');
     }
 }
 

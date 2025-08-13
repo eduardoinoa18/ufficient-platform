@@ -1,82 +1,47 @@
 import { NextRequest, NextResponse } from 'next/server';
-
-// This is a mock implementation. In production, you would:
-// 1. Save to MongoDB Atlas
-// 2. Send email via AWS SES
-// 3. Add proper validation and rate limiting
-// 4. Implement CAPTCHA verification
+import { adminDb } from '@/lib/firebase-admin';
 
 export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
         const { name, email, subject, message, type, timestamp } = body;
 
-        // Basic validation
         if (!name || !email || !message) {
-            return NextResponse.json(
-                { error: 'Missing required fields' },
-                { status: 400 }
-            );
+            return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
         }
 
-        // Email validation
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
-            return NextResponse.json(
-                { error: 'Invalid email format' },
-                { status: 400 }
-            );
+            return NextResponse.json({ error: 'Invalid email format' }, { status: 400 });
         }
 
-        // In production, implement:
-        // 1. MongoDB Atlas connection
-        // const contact = await db.collection('contacts').insertOne({
-        //   name, email, subject, message, type, timestamp, status: 'new'
-        // });
+        if (!adminDb) {
+            console.warn('[Contact] Firebase Admin not configured. Falling back to log only.');
+            console.log('Contact form submission (no DB):', { name, email, subject, message, type, timestamp });
+            return NextResponse.json({ success: true, message: 'Received (no DB configured)' }, { status: 200 });
+        }
 
-        // 2. AWS SES email notification
-        // await sendNotificationEmail({
-        //   to: 'hello@ufficient.app',
-        //   subject: `New Contact: ${type} - ${subject}`,
-        //   body: `From: ${name} (${email})\nType: ${type}\nMessage: ${message}`
-        // });
-
-        // 3. Auto-reply to user
-        // await sendAutoReply({
-        //   to: email,
-        //   name: name,
-        //   type: type
-        // });
-
-        // Mock success response
-        console.log('Contact form submission:', {
+        const doc = await adminDb.collection('contacts').add({
             name,
             email,
-            subject,
+            subject: subject || '',
             message,
-            type,
-            timestamp
+            type: type || 'general',
+            timestamp: timestamp || new Date().toISOString(),
+            status: 'new',
+            createdAt: new Date(),
         });
 
         return NextResponse.json(
-            {
-                success: true,
-                message: 'Contact form submitted successfully',
-                id: `contact_${Date.now()}`
-            },
-            { status: 200 }
+            { success: true, message: 'Contact form submitted', id: doc.id },
+            { status: 200, headers: { 'Access-Control-Allow-Origin': '*' } }
         );
-
     } catch (error) {
         console.error('Contact form error:', error);
-        return NextResponse.json(
-            { error: 'Internal server error' },
-            { status: 500 }
-        );
+        return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
     }
 }
 
-// Handle OPTIONS for CORS
 export async function OPTIONS() {
     return NextResponse.json(
         {},

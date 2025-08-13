@@ -1,26 +1,23 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import { adminDb } from '../../../lib/firebase-admin';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
     try {
-        // Real user data for V1 - initially empty until users start registering
-        // This will be populated as users sign up for UFFICIENT
-        const users = [];
+        const { searchParams } = new URL(request.url);
+        const page = Number(searchParams.get('page') || 1);
+        const limit = Number(searchParams.get('limit') || 20);
 
-        const response = {
-            users,
-            total: 0,
-            active: 0,
-            pro: 0,
-            free: 0,
-            lastUpdated: new Date().toISOString()
-        };
+        if (!adminDb) {
+            console.warn('[Admin Users] Firebase Admin not configured, returning empty list');
+            return NextResponse.json({ items: [], total: 0, page, limit, hasNext: false });
+        }
 
-        return NextResponse.json(response);
+        const snap = await adminDb.collection('users').orderBy('createdAt', 'desc').limit(limit).get();
+        const items = snap.docs.map((d: any) => ({ id: d.id, ...d.data() }));
+
+        return NextResponse.json({ items, total: items.length, page, limit, hasNext: items.length === limit });
     } catch (error) {
-        console.error('Error fetching users:', error);
-        return NextResponse.json(
-            { error: 'Failed to fetch users' },
-            { status: 500 }
-        );
+        console.error('[Admin Users] GET error:', error);
+        return NextResponse.json({ error: 'Failed to fetch users' }, { status: 500 });
     }
 }

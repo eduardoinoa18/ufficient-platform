@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TextInput, TouchableOpacity, ActivityIndicator, KeyboardAvoidingView, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { createTask, fetchTasks, Task } from './api';
 
 const Tab = createBottomTabNavigator();
 
@@ -12,9 +13,12 @@ const Tab = createBottomTabNavigator();
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: '#ffffff',
+    },
+    center: {
+        flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#ffffff',
         padding: 20,
     },
     title: {
@@ -28,32 +32,154 @@ const styles = StyleSheet.create({
         color: '#6B7280',
         textAlign: 'center',
     },
+    list: {
+        padding: 16,
+        gap: 12,
+    },
+    card: {
+        backgroundColor: '#F9FAFB',
+        borderRadius: 12,
+        padding: 14,
+        marginBottom: 12,
+        borderWidth: 1,
+        borderColor: '#E5E7EB',
+    },
+    cardTitle: {
+        fontSize: 16,
+        color: '#111827',
+        fontWeight: '600',
+    },
+    inputRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 12,
+        borderTopWidth: 1,
+        borderColor: '#E5E7EB',
+        gap: 8,
+    },
+    input: {
+        flex: 1,
+        backgroundColor: '#F3F4F6',
+        paddingHorizontal: 12,
+        paddingVertical: 10,
+        borderRadius: 10,
+        fontSize: 16,
+        color: '#111827',
+    },
+    button: {
+        backgroundColor: '#6C00FF',
+        paddingHorizontal: 16,
+        paddingVertical: 12,
+        borderRadius: 10,
+    },
+    buttonText: {
+        color: '#fff',
+        fontWeight: 'bold',
+    },
 });
 
-// Temporary placeholder screens
+// Placeholder Dashboard
 const DashboardScreen = () => (
-    <View style={styles.container}>
+    <View style={styles.center}>
         <Text style={styles.title}>Dashboard</Text>
         <Text style={styles.subtitle}>Track your progress and streaks</Text>
     </View>
 );
 
-const TasksScreen = () => (
-    <View style={styles.container}>
-        <Text style={styles.title}>Tasks</Text>
-        <Text style={styles.subtitle}>Manage your daily tasks</Text>
-    </View>
-);
+// Tasks screen with API integration and optimistic updates
+const TasksScreen = () => {
+    const [tasks, setTasks] = useState<Task[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    const [newTitle, setNewTitle] = useState('');
+    const userId = 'demo-user';
+
+    const load = async () => {
+        try {
+            setLoading(true);
+            const data = await fetchTasks(userId);
+            setTasks(data);
+            setError(null);
+        } catch (e: any) {
+            setError(e.message || 'Failed to load tasks');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        load();
+    }, []);
+
+    const onAdd = async () => {
+        if (!newTitle.trim()) return;
+        const optimistic: Task = {
+            id: `tmp-${Date.now()}`,
+            userId,
+            title: newTitle.trim(),
+            completed: false,
+        };
+        setTasks((t) => [optimistic, ...t]);
+        setNewTitle('');
+        try {
+            const created = await createTask({ userId, title: optimistic.title });
+            setTasks((prev) => prev.map((x) => (x.id === optimistic.id ? created : x)));
+        } catch (e) {
+            // rollback
+            setTasks((prev) => prev.filter((x) => x.id !== optimistic.id));
+            setError('Failed to add task');
+        }
+    };
+
+    return (
+        <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+            {loading ? (
+                <View style={styles.center}>
+                    <ActivityIndicator size="large" color="#6C00FF" />
+                </View>
+            ) : (
+                <FlatList
+                    contentContainerStyle={{ padding: 16 }}
+                    data={tasks}
+                    keyExtractor={(item) => item.id}
+                    renderItem={({ item }) => (
+                        <View style={styles.card}>
+                            <Text style={styles.cardTitle}>{item.title}</Text>
+                        </View>
+                    )}
+                    ListEmptyComponent={() => (
+                        <View style={styles.center}>
+                            <Text style={styles.subtitle}>No tasks yet. Add one below.</Text>
+                        </View>
+                    )}
+                />
+            )}
+            <View style={styles.inputRow}>
+                <TextInput
+                    placeholder="Add a new task"
+                    value={newTitle}
+                    onChangeText={setNewTitle}
+                    style={styles.input}
+                    returnKeyType="done"
+                    onSubmitEditing={onAdd}
+                />
+                <TouchableOpacity style={styles.button} onPress={onAdd}>
+                    <Ionicons name="add" size={20} color="#fff" />
+                </TouchableOpacity>
+            </View>
+        </KeyboardAvoidingView>
+    );
+};
 
 const FeedScreen = () => (
-    <View style={styles.container}>
+    <View style={styles.center}>
         <Text style={styles.title}>Feed</Text>
         <Text style={styles.subtitle}>Connect with the community</Text>
     </View>
 );
 
 const ProfileScreen = () => (
-    <View style={styles.container}>
+    <View style={styles.center}>
         <Text style={styles.title}>Profile</Text>
         <Text style={styles.subtitle}>View your achievements</Text>
     </View>

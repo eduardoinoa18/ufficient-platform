@@ -35,3 +35,9 @@ export async function POST(request: NextRequest) {
         );
     }
 }
+
+export async function GET() {
+    return NextResponse.json({
+        error: 'Deprecated endpoint. Use /api/metrics, /api/users, /api/tasks, or /api/auth/* instead.'
+    }, { status: 410 });
+}
