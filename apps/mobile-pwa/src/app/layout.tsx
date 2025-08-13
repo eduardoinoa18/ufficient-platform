@@ -20,7 +20,6 @@ export const viewport: Viewport = {
     minimumScale: 1,
     initialScale: 1,
     width: 'device-width',
-    shrinkToFit: false,
     viewportFit: 'cover',
     themeColor: [
         { media: '(prefers-color-scheme: light)', color: '#6C00FF' },

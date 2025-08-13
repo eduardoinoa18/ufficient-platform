@@ -76,8 +76,10 @@ export const debounce = <T extends (...args: any[]) => any>(
     };
 };
 
-export const cn = (...classes: (string | undefined | null | false)[]): string => {
-    return classes.filter(Boolean).join(' ');
+export const cn = (
+    ...classes: Array<string | number | bigint | null | undefined | false>
+): string => {
+    return classes.filter(Boolean).map(String).join(' ');
 };
 
 // UFFICIENT-specific utilities
