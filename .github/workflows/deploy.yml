@@ -29,11 +29,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
           cache: 'npm'
 
       - name: Install Dependencies
-        run: npm ci
+        run: npm install
 
       - name: Type Check (Landing)
         run: npm run type-check --workspace=apps/landing
@@ -53,6 +53,7 @@ jobs:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_LANDING_PROJECT_ID }}
+          working-directory: ./apps/landing
           vercel-args: '--prod'
 
   deploy-admin:
@@ -66,11 +67,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
           cache: 'npm'
 
       - name: Install Dependencies
-        run: npm ci
+        run: npm install
 
       - name: Type Check (Admin)
         run: npm run type-check --workspace=apps/admin
@@ -97,6 +98,7 @@ jobs:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_ADMIN_PROJECT_ID }}
+          working-directory: ./apps/admin
           vercel-args: '--prod'
 
   deploy-pwa:
@@ -110,11 +112,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
           cache: 'npm'
 
       - name: Install Dependencies
-        run: npm ci
+        run: npm install
 
       - name: Type Check (PWA)
         run: npm run type-check --workspace=apps/mobile-pwa
@@ -135,6 +137,7 @@ jobs:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PWA_PROJECT_ID }}
+          working-directory: ./apps/mobile-pwa
           vercel-args: '--prod'
 
   # Disable native app build for now
