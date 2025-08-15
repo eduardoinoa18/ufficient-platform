@@ -1,28 +1,13 @@
 /** @type {import('tailwindcss').Config} */
+const sharedConfig = require('../../packages/config/tailwind.config.js');
+
 module.exports = {
+    ...sharedConfig,
     content: [
-        './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
-        './src/components/**/*.{js,ts,jsx,tsx,mdx}',
+        './src/**/*.{js,ts,jsx,tsx,mdx}',
         './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+        './src/components/**/*.{js,ts,jsx,tsx,mdx}',
+        // Include shared packages
+        '../../packages/ui/src/**/*.{js,ts,jsx,tsx}',
     ],
-    theme: {
-        extend: {
-            fontFamily: {
-                'montserrat': ['Montserrat', 'sans-serif'],
-                'poppins': ['Poppins', 'sans-serif'],
-                'inter': ['Inter', 'sans-serif'],
-                'roboto': ['Roboto', 'sans-serif'],
-            },
-            colors: {
-                'ufficient-purple': '#6C00FF',
-                'ufficient-blue': '#4CD7F8',
-            },
-            backgroundImage: {
-                'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-                'gradient-conic':
-                    'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
-            },
-        },
-    },
-    plugins: [],
-}
+};
