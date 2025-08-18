@@ -4,18 +4,23 @@ import React, { useState, useEffect } from 'react';
 import { CheckCircle, Clock, Trophy, Flame, Plus, User, BarChart3 } from 'lucide-react';
 import type { Task } from '@ufficient/core';
 import { useAuth } from '../context/AuthContext';
+import { getAuth } from 'firebase/auth';
+import Link from 'next/link';
 
 export default function MobilePWAPage() {
-    const { user } = useAuth();
+    const { user, loading: authLoading } = useAuth();
     const userId = user?.uid;
     const [tasks, setTasks] = useState<Task[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        if (!userId) return;
-        const fetchTasks = async () => {
+        const load = async () => {
+            if (!userId) return;
             try {
-                const res = await fetch(`/api/tasks?userId=${userId}`);
+                const token = await getAuth().currentUser?.getIdToken();
+                const res = await fetch(`/api/tasks?userId=${userId}`, {
+                    headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+                });
                 const data = await res.json();
                 setTasks(data.items || []);
             } catch (e) {
@@ -24,7 +29,7 @@ export default function MobilePWAPage() {
                 setLoading(false);
             }
         };
-        fetchTasks();
+        load();
     }, [userId]);
 
     const addTask = async () => {
@@ -36,9 +41,13 @@ export default function MobilePWAPage() {
         setTasks((prev) => [optimistic as Task, ...prev]);
 
         try {
+            const token = await getAuth().currentUser?.getIdToken();
             const res = await fetch('/api/tasks', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+                },
                 body: JSON.stringify({ userId, title }),
             });
             const data = await res.json();
@@ -61,6 +70,25 @@ export default function MobilePWAPage() {
 
     const currentStreak = 0;
     const totalPoints = tasks.reduce((acc, t) => acc + (t.completed ? 10 : 0), 0);
+
+    if (authLoading) {
+        return <div className="min-h-screen flex items-center justify-center text-gray-500">Loading...</div>;
+    }
+
+    if (!userId) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-50 to-white">
+                <div className="bg-white p-6 rounded-xl shadow-md text-center">
+                    <h1 className="text-2xl font-bold mb-2">Welcome to UFFICIENT</h1>
+                    <p className="text-gray-600 mb-4">Please log in or sign up to start tracking your tasks.</p>
+                    <div className="flex gap-3 justify-center">
+                        <Link href="/login" className="px-4 py-2 bg-primary-500 text-white rounded">Login</Link>
+                        <Link href="/signup" className="px-4 py-2 border border-primary-500 text-primary-600 rounded">Sign Up</Link>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-primary-50 to-white">
