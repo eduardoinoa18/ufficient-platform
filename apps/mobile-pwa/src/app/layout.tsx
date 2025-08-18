@@ -27,6 +27,8 @@ export const viewport: Viewport = {
     ],
 };
 
+import { AuthProvider } from '../context/AuthContext';
+
 export default function RootLayout({
     children,
 }: {
@@ -52,9 +54,11 @@ export default function RootLayout({
                 <link rel="shortcut icon" href="/favicon.ico" />
             </head>
             <body className="font-inter antialiased">
-                <div id="root">
-                    {children}
-                </div>
+                <AuthProvider>
+                    <div id="root">
+                        {children}
+                    </div>
+                </AuthProvider>
             </body>
         </html>
     );

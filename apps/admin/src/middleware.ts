@@ -1,10 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { jwtVerify } from 'jose';
+import { getAuth } from 'firebase-admin/auth';
+import { initializeFirebaseAdmin } from './lib/firebase-admin';
+
+// Initialize Firebase Admin SDK
+initializeFirebaseAdmin();
 
 const PUBLIC_PATHS = [
     '/login',
-    '/api/auth/login',
-    '/api/auth/session',
+    '/api/auth/login', // Keep demo login for now
+    '/api/auth/session', // New session login
     '/_next',
     '/favicon.ico',
     '/assets',
@@ -13,26 +17,41 @@ const PUBLIC_PATHS = [
 
 export async function middleware(req: NextRequest) {
     const { pathname } = req.nextUrl;
-    if (PUBLIC_PATHS.some((p) => pathname.startsWith(p))) return NextResponse.next();
 
-    const token = req.cookies.get('auth-token')?.value;
-    if (!token) {
-        const url = req.nextUrl.clone();
-        url.pathname = '/login';
-        return NextResponse.redirect(url);
+    // Allow public paths
+    if (PUBLIC_PATHS.some((p) => pathname.startsWith(p))) {
+        return NextResponse.next();
     }
 
+    // Check for the session cookie
+    const sessionCookie = req.cookies.get('session')?.value;
+    if (!sessionCookie) {
+        return redirectToLogin(req);
+    }
+
+    // Verify the session cookie
     try {
-        const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || 'dev-secret-change-me');
-        await jwtVerify(token, JWT_SECRET);
+        await getAuth().verifySessionCookie(sessionCookie, true);
         return NextResponse.next();
-    } catch {
-        const url = req.nextUrl.clone();
-        url.pathname = '/login';
-        return NextResponse.redirect(url);
+    } catch (error) {
+        console.warn('Session cookie verification failed:', error);
+        return redirectToLogin(req);
     }
 }
 
+function redirectToLogin(req: NextRequest) {
+    const url = req.nextUrl.clone();
+    url.pathname = '/login';
+    // Clear the invalid cookie if it exists
+    url.searchParams.set('cleared', 'true');
+    const res = NextResponse.redirect(url);
+    res.cookies.delete('session');
+    return res;
+}
+
 export const config = {
-    matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
+    // Match all paths except for static assets and API routes that don't need protection
+    matcher: [
+        '/((?!_next/static|_next/image|favicon.ico|api/auth/login|api/auth/session).*)',
+    ],
 };

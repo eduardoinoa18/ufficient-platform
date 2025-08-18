@@ -3,13 +3,16 @@
 import React, { useState, useEffect } from 'react';
 import { CheckCircle, Clock, Trophy, Flame, Plus, User, BarChart3 } from 'lucide-react';
 import type { Task } from '@ufficient/core';
+import { useAuth } from '../context/AuthContext';
 
 export default function MobilePWAPage() {
-    const userId = 'demo-user'; // Replace with real auth user when auth is added
+    const { user } = useAuth();
+    const userId = user?.uid;
     const [tasks, setTasks] = useState<Task[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        if (!userId) return;
         const fetchTasks = async () => {
             try {
                 const res = await fetch(`/api/tasks?userId=${userId}`);
@@ -22,9 +25,10 @@ export default function MobilePWAPage() {
             }
         };
         fetchTasks();
-    }, []);
+    }, [userId]);
 
     const addTask = async () => {
+        if (!userId) return;
         const title = prompt('New task title');
         if (!title) return;
 

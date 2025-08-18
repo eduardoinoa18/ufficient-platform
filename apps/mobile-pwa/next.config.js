@@ -12,27 +12,12 @@ const nextConfig = {
         domains: ['localhost'],
     },
     async rewrites() {
+        const adminUrl = process.env.ADMIN_API_URL || 'http://localhost:3001';
         return [
-            // Proxy admin and shared APIs to Admin app (port 3001)
+            // Proxy all API calls to the Admin app
             {
-                source: '/api/admin/:path*',
-                destination: 'http://localhost:3001/api/admin/:path*',
-            },
-            {
-                source: '/api/auth/:path*',
-                destination: 'http://localhost:3001/api/auth/:path*',
-            },
-            {
-                source: '/api/metrics',
-                destination: 'http://localhost:3001/api/metrics',
-            },
-            {
-                source: '/api/users',
-                destination: 'http://localhost:3001/api/users',
-            },
-            {
-                source: '/api/tasks',
-                destination: 'http://localhost:3001/api/tasks',
+                source: '/api/:path*',
+                destination: `${adminUrl}/api/:path*`,
             },
         ];
     },

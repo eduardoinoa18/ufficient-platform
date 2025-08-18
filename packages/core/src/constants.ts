@@ -50,9 +50,9 @@ export const BADGE_IDS = {
 export const API_ENDPOINTS = {
   // Admin endpoints
   ADMIN: {
-    LOGIN: '/api/admin/login',
-    METRICS: '/api/admin/metrics',
-    USERS: '/api/admin/users',
+    LOGIN: '/api/auth/login',
+    METRICS: '/api/metrics',
+    USERS: '/api/users',
   },
   // User endpoints
   USERS: '/api/users',

@@ -1,9 +1,14 @@
 "use client";
 import { useState } from "react";
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { getFirebaseApp } from '../lib/firebase-client';
+
+// Initialize Firebase app
+getFirebaseApp();
 
 export default function AuthForm() {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [email, setEmail] = useState("admin@ufficient.com");
+    const [password, setPassword] = useState("admin123");
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
 
@@ -13,20 +18,25 @@ export default function AuthForm() {
         setError("");
 
         try {
-            const res = await fetch("/api/auth/login", {
+            const auth = getAuth();
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            const idToken = await userCredential.user.getIdToken();
+
+            // Exchange ID token for session cookie
+            const res = await fetch("/api/auth/session", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, password }),
+                body: JSON.stringify({ idToken }),
             });
 
             if (res.ok) {
                 window.location.href = "/dashboard";
             } else {
                 const data = await res.json();
-                setError(data.error || "Invalid login credentials");
+                setError(data.error || "Session login failed.");
             }
-        } catch (err) {
-            setError("Login failed. Please try again.");
+        } catch (err: any) {
+            setError(err.message || "Login failed. Please check your credentials.");
         } finally {
             setIsLoading(false);
         }
@@ -69,9 +79,7 @@ export default function AuthForm() {
             </button>
 
             <div className="text-sm text-gray-600 text-center mt-4">
-                <p>Demo credentials:</p>
-                <p><strong>Email:</strong> admin@ufficient.com</p>
-                <p><strong>Password:</strong> admin123</p>
+                <p>Login with your Firebase credentials.</p>
             </div>
         </form>
     );
