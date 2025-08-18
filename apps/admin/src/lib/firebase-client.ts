@@ -1,5 +1,5 @@
 // Firebase Web Client initialization for Admin app
-import { initializeApp, getApps } from 'firebase/app';
+import { initializeApp, getApps, type FirebaseApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
@@ -10,9 +10,17 @@ const firebaseConfig = {
     messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID as string,
 };
 
-export function getFirebaseAuth() {
-    if (!getApps().length) {
-        initializeApp(firebaseConfig);
+let cachedApp: FirebaseApp | null = null;
+
+export function getFirebaseApp(): FirebaseApp {
+    if (!cachedApp) {
+        cachedApp = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
     }
+    return cachedApp;
+}
+
+export function getFirebaseAuth() {
+    // Ensure app is initialized before obtaining Auth
+    getFirebaseApp();
     return getAuth();
 }

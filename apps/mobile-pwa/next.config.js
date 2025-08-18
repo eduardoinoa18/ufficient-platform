@@ -1,10 +1,13 @@
 /** @type {import('next').NextConfig} */
-const withPWA = require('next-pwa')({
-    dest: 'public',
-    register: true,
-    skipWaiting: true,
-    disable: process.env.NODE_ENV === 'development'
-});
+const enablePWA = !(process.env.NEXT_DISABLE_PWA === '1' || process.env.NEXT_DISABLE_PWA === 'true');
+const withPWA = enablePWA
+    ? require('next-pwa')({
+        dest: 'public',
+        register: true,
+        skipWaiting: true,
+        disable: process.env.NODE_ENV === 'development'
+    })
+    : (config) => config;
 
 const nextConfig = {
     transpilePackages: ['@ufficient/ui', '@ufficient/core'],

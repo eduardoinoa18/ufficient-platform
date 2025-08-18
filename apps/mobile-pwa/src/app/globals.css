@@ -32,8 +32,10 @@ body {
 }
 
 /* PWA specific styles */
-.pwa-install-button {
-  @apply bg-primary-500 text-white px-4 py-2 rounded-lg font-medium hover:bg-primary-600 transition-colors;
+@layer components {
+  .pwa-install-button {
+    @apply bg-primary-500 text-white px-4 py-2 rounded-lg font-medium hover:bg-primary-600 transition-colors;
+  }
 }
 
 /* Mobile-optimized styles */

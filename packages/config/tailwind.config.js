@@ -46,7 +46,15 @@ module.exports = {
                         800: '#1F2937',
                         900: '#111827',
                     }
-                }
+                },
+                primary: {
+                    50: '#f0f3ff',
+                    100: '#e0e7ff',
+                    500: '#6C00FF', // brand purple
+                    600: '#5B00D9',
+                    700: '#4A00B3',
+                    900: '#29006E',
+                },
             },
             backgroundImage: {
                 // UFFICIENT Brand Gradients
