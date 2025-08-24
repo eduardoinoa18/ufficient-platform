@@ -1,8 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     experimental: {
-        // Ensure CSS is properly handled
-        optimizeCss: true,
+        // no experimental optimizeCss
     },
     compiler: {
         // Remove console.logs in production
